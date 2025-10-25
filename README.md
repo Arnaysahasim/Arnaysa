@@ -1,2 +1,1 @@
-# Arnaysa
-WebProject
+python projects 
