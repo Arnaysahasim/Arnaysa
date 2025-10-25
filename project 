@@ -1,0 +1,138 @@
+class PatientNode:
+    def __init__(self, patient_id, name, age, disease):
+        self.patient_id = patient_id
+        self.name = name
+        self.age = age
+        self.disease = disease
+        self.next = None
+
+class PatientLinkedList:
+    def __init__(self):
+        self.head = None
+
+    # Add a new patient
+    def add_patient(self, patient_id, name, age, disease):
+        new_patient = PatientNode(patient_id, name, age, disease)
+        if not self.head:
+            self.head = new_patient
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_patient
+        print(f"[✅] Patient '{name}' (ID: {patient_id}) added successfully!")
+
+    # Search for a patient by ID
+    def search_by_id(self, patient_id):
+        current = self.head
+        while current:
+            if current.patient_id == patient_id:
+                print(f"\n[🔍 FOUND] Patient ID: {current.patient_id}")
+                print(f"Name    : {current.name}")
+                print(f"Age     : {current.age}")
+                print(f"Disease : {current.disease}\n")
+                return current
+            current = current.next
+        print(f"[⚠️] Patient with ID {patient_id} not found.")
+        return None
+
+    # Search for a patient by name
+    def search_by_name(self, name):
+        current = self.head
+        found = False
+        while current:
+            if current.name.lower() == name.lower():
+                print(f"\n[🔍 FOUND] Patient ID: {current.patient_id}")
+                print(f"Name    : {current.name}")
+                print(f"Age     : {current.age}")
+                print(f"Disease : {current.disease}\n")
+                found = True
+            current = current.next
+        if not found:
+            print(f"[⚠️] Patient named '{name}' not found.")
+
+    # Delete a patient by ID
+    def delete_patient(self, patient_id):
+        current = self.head
+        prev = None
+        while current:
+            if current.patient_id == patient_id:
+                if prev:
+                    prev.next = current.next
+                else:
+                    self.head = current.next
+                print(f"[🗑️] Patient ID {patient_id} deleted successfully.")
+                return
+            prev = current
+            current = current.next
+        print(f"[⚠️] Patient ID {patient_id} not found.")
+
+    # Display all patients
+    def display_all_patients(self):
+        if not self.head:
+            print("[ℹ️] No patients in the system.")
+            return
+        print("\n=== 🏥 List of Patients ===")
+        print(f"{'ID':<8}{'Name':<20}{'Age':<6}{'Disease'}")
+        print("-" * 40)
+        current = self.head
+        while current:
+            print(f"{current.patient_id:<8}{current.name:<20}{current.age:<6}{current.disease}")
+            current = current.next
+        print("-" * 40)
+
+# ----------------------------
+# Simulation System Class
+# ----------------------------
+class HealthcareSimulation:
+    def __init__(self):
+        self.patients = PatientLinkedList()
+
+    def simulate(self):
+        while True:
+            print("\n==== HEALTHCARE MANAGEMENT SYSTEM ====")
+            print("1. Add new patient")
+            print("2. Display all patients")
+            print("3. Search patient by ID")
+            print("4. Search patient by Name")
+            print("5. Delete patient")
+            print("6. Exit system")
+            print("======================================")
+
+            choice = input("Enter your choice (1-6): ")
+
+            if choice == '1':
+                self.add_patient_sim()
+            elif choice == '2':
+                self.patients.display_all_patients()
+            elif choice == '3':
+                pid = input("Enter Patient ID to search: ")
+                self.patients.search_by_id(pid)
+            elif choice == '4':
+                name = input("Enter Patient Name to search: ")
+                self.patients.search_by_name(name)
+            elif choice == '5':
+                pid = input("Enter Patient ID to delete: ")
+                self.patients.delete_patient(pid)
+            elif choice == '6':
+                print("\n[👋] Exiting Healthcare Management System...")
+                time.sleep(1)
+                break
+            else:
+                print("[⚠️] Invalid choice, please try again.")
+
+    # Helper: Add patient simulation
+    def add_patient_sim(self):
+        print("\n=== Add New Patient ===")
+        pid = input("Enter Patient ID: ")
+        name = input("Enter Patient Name: ")
+        age = input("Enter Age: ")
+        disease = input("Enter Disease/Condition: ")
+        self.patients.add_patient(pid, name, age, disease)
+
+# ----------------------------
+# Main Entry Point
+# ----------------------------
+if __name__ == "__main__":
+    print("🏥 Healthcare Management System Using Linked List 🩺")
+    print("Manage patients with Add, Search, Delete, Display features.\n")
